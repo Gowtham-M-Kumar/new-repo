@@ -1,0 +1,21 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Delete Resume Section{% endblock %}
+
+{% block content %}
+<div class="delete-container">
+    <div class="delete-card">
+        <h2>Delete Resume Section</h2>
+        <p>Are you sure you want to delete "{{ section.title }}"?</p>
+        <p class="warning">This action cannot be undone.</p>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="delete-actions">
+                <button type="submit" class="btn btn-danger">Delete Section</button>
+                <a href="{% url 'resume:resume_view' %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %} 

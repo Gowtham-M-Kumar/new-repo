@@ -1,0 +1,43 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Manage Resume{% endblock %}
+
+{% block content %}
+<div class="manage-container">
+    <div class="manage-header">
+        <h2>Manage Resume Sections</h2>
+        <a href="{% url 'resume:resume_section_create' %}" class="btn btn-primary">Add New Section</a>
+    </div>
+    
+    <div class="resume-sections-list">
+        {% for section in resume_sections %}
+        <div class="section-item">
+            <div class="section-info">
+                <h3>{{ section.title }}</h3>
+                <p class="section-meta">
+                    <span class="type">{{ section.get_section_type_display }}</span>
+                    <span class="status {% if section.is_active %}active{% else %}inactive{% endif %}">
+                        {% if section.is_active %}Active{% else %}Inactive{% endif %}
+                    </span>
+                    <span class="order">Order: {{ section.order }}</span>
+                </p>
+                {% if section.subtitle %}
+                <p class="section-subtitle">{{ section.subtitle }}</p>
+                {% endif %}
+                {% if section.description %}
+                <p class="section-description">{{ section.description|truncatewords:15 }}</p>
+                {% endif %}
+            </div>
+            <div class="section-actions">
+                <a href="{% url 'resume:resume_section_update' section.pk %}" class="btn btn-sm btn-secondary">Edit</a>
+                <a href="{% url 'resume:resume_section_delete' section.pk %}" class="btn btn-sm btn-danger">Delete</a>
+            </div>
+        </div>
+        {% empty %}
+        <div class="no-sections">
+            <p>No resume sections found. <a href="{% url 'resume:resume_section_create' %}">Add your first section</a></p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 

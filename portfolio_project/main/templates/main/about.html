@@ -1,0 +1,41 @@
+{% extends 'main/base.html' %}
+{% block title %}About | Gowtham{% endblock %}
+{% block content %}
+<section class="about-section">
+    <div class="particles-background" id="particles-about"></div>
+    <div class="container">
+        <div class="section-title">
+            <h2>About Me</h2>
+        </div>
+        <div class="about-grid">
+            <div class="about-image">
+                {% if about_content and about_content.image %}
+                    <img src="{{ about_content.image.url }}" alt="About Me">
+                {% else %}
+                    <img src="/static/images/me1c.jpg" alt="About Me">
+                {% endif %}
+            </div>
+            <div class="about-content">
+                <h3>{% if about_content %}{{ about_content.title }}{% else %}Why Hire Me?{% endif %}</h3>
+                <p>{% if about_content %}{{ about_content.content }}{% else %}I specialize in building full-stack web applications that are both user-friendly and performance-optimized. My goal is to help companies turn ideas into digital solutions. I thrive in collaborative environments, communicate effectively, and contribute code that others can trust and build upon. From designing frontend interfaces to integrating powerful backend logic, I bring full-stack development expertise that bridges user experience and system performance.{% endif %}</p>
+                <div class="skills-list">
+                    {% if about_content %}
+                        {% for skill in about_content.skills.split ',' %}
+                            <span class="skill-tag">{{ skill.strip }}</span>
+                        {% endfor %}
+                    {% else %}
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">Django</span>
+                        <span class="skill-tag">Django REST</span>
+                        <span class="skill-tag">Git & GitHub</span>
+                        <span class="skill-tag">HTML/CSS</span>
+                        <span class="skill-tag">Pandas</span>
+                        <span class="skill-tag">Bootstrap</span>
+                        <span class="skill-tag">SQLite/PostgreSQL</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

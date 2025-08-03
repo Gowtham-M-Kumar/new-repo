@@ -1,0 +1,560 @@
+{% extends 'main/base.html' %}
+{% block title %}Settings Dashboard | Gowtham{% endblock %}
+{% block content %}
+<section class="settings-dashboard">
+    <div class="particles-background" id="particles-dashboard"></div>
+    <div class="container">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">
+                <span class="title-text">⚙️ Settings Dashboard</span>
+            </h1>
+            <p class="dashboard-subtitle">Manage your portfolio content with ease</p>
+        </div>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">
+                    {{ message }}
+                    <button class="message-close">&times;</button>
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        <div class="dashboard-grid">
+            <!-- Projects Card -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon">🚀</div>
+                    <h3 class="card-title">Projects</h3>
+                </div>
+                <div class="card-content">
+                    <div class="card-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">{{ total_projects }}</div>
+                            <div class="stat-label">Total</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">{{ active_projects }}</div>
+                            <div class="stat-label">Active</div>
+                        </div>
+                    </div>
+                    <div class="item-list">
+                        {% for project in projects|slice:":3" %}
+                            <div class="item">
+                                <div class="item-title">{{ project.title }}</div>
+                                <div class="item-meta">{{ project.tags|truncatechars:30 }}</div>
+                            </div>
+                        {% empty %}
+                            <div class="item">No projects yet</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <a href="{% url 'projects:project_create' %}" class="cta-button hover-effect">
+                        <span>Add Project</span>
+                        <svg class="button-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                    {% if projects %}
+                        <a href="{% url 'projects:project_manage' %}" class="cta-button hover-effect secondary">
+                            <span>Manage Projects</span>
+                            <svg class="button-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Resume Card -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon">📄</div>
+                    <h3 class="card-title">Resume</h3>
+                </div>
+                <div class="card-content">
+                    <div class="card-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">{{ education_sections }}</div>
+                            <div class="stat-label">Education</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">{{ experience_sections }}</div>
+                            <div class="stat-label">Experience</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">{{ skills_sections }}</div>
+                            <div class="stat-label">Skills</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <a href="{% url 'resume:resume_section_create' %}" class="cta-button hover-effect">
+                        <span>Add Section</span>
+                        <svg class="button-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                    {% if resume_sections %}
+                        <a href="{% url 'resume:resume_manage' %}" class="cta-button hover-effect secondary">
+                            <span>Manage Sections</span>
+                            <svg class="button-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- About Card -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon">👤</div>
+                    <h3 class="card-title">About</h3>
+                </div>
+                <div class="card-content">
+                    {% if about_content %}
+                        <div class="item">
+                            <div class="item-title">{{ about_content.title }}</div>
+                            <div class="item-meta">{{ about_content.content|truncatechars:50 }}</div>
+                        </div>
+                    {% else %}
+                        <div class="item">No about content yet</div>
+                    {% endif %}
+                </div>
+                <div class="card-actions">
+                    <a href="{% url 'edit_about' %}" class="cta-button hover-effect">
+                        <span>{% if about_content %}Edit{% else %}Add{% endif %} About</span>
+                        <svg class="button-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Contact Card -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon">📧</div>
+                    <h3 class="card-title">Contact Info</h3>
+                </div>
+                <div class="card-content">
+                    {% if contact_info %}
+                        <div class="item">
+                            <div class="item-title">{{ contact_info.email }}</div>
+                            <div class="item-meta">LinkedIn: {{ contact_info.linkedin_url|truncatechars:30 }}</div>
+                        </div>
+                    {% else %}
+                        <div class="item">No contact info yet</div>
+                    {% endif %}
+                </div>
+                <div class="card-actions">
+                    <a href="{% url 'contact:contact_info_edit' %}" class="cta-button hover-effect">
+                        <span>{% if contact_info %}Edit{% else %}Add{% endif %} Contact</span>
+                        <svg class="button-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="dashboard-footer">
+            <a href="{% url 'settings_logout' %}" class="logout-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Logout
+            </a>
+        </div>
+    </div>
+</section>
+
+<style>
+.settings-dashboard {
+    min-height: 100vh;
+    background: var(--bg);
+    padding: 2rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+    z-index: 10;
+}
+
+.dashboard-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.dashboard-subtitle {
+    font-size: 1.2rem;
+    color: var(--text-light);
+    margin-bottom: 0;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+    position: relative;
+    z-index: 10;
+}
+
+.dashboard-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: var(--shadow-xl);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text);
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.dashboard-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(6, 182, 212, 0.1));
+    border-radius: 24px;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl), 0 0 40px rgba(139, 92, 246, 0.2);
+}
+
+.dashboard-card:hover::before {
+    opacity: 1;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.card-icon {
+    font-size: 2.5rem;
+    margin-right: 1rem;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 0;
+}
+
+.card-content {
+    margin-bottom: 1.5rem;
+}
+
+.card-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    gap: 1rem;
+}
+
+.stat-item {
+    text-align: center;
+    flex: 1;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: block;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-top: 0.25rem;
+}
+
+.item-list {
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+}
+
+.item {
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    margin-bottom: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(4px);
+}
+
+.item-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: var(--text);
+}
+
+.item-meta {
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+.card-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.card-actions .cta-button {
+    flex: 1;
+    min-width: 140px;
+    justify-content: center;
+    font-size: 0.9rem;
+    padding: 0.75rem 1rem;
+}
+
+.dashboard-footer {
+    text-align: center;
+    position: relative;
+    z-index: 10;
+}
+
+.logout-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    padding: 1rem 2rem;
+    border-radius: 16px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.logout-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+}
+
+.logout-btn svg {
+    transition: transform 0.3s ease;
+}
+
+.logout-btn:hover svg {
+    transform: translateX(4px);
+}
+
+/* Custom scrollbar for item-list */
+.item-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.item-list::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+}
+
+.item-list::-webkit-scrollbar-thumb {
+    background: rgba(139, 92, 246, 0.3);
+    border-radius: 3px;
+}
+
+.item-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(139, 92, 246, 0.5);
+}
+
+@media (max-width: 768px) {
+    .dashboard-title {
+        font-size: 2rem;
+    }
+    
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .dashboard-card {
+        padding: 1.5rem;
+    }
+    
+    .card-actions {
+        flex-direction: column;
+    }
+    
+    .card-actions .cta-button {
+        width: 100%;
+    }
+    
+    .card-stats {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .stat-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: left;
+    }
+    
+    .stat-number {
+        font-size: 1.5rem;
+    }
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Particles configuration for dashboard
+    const particlesConfig = {
+        "particles": {
+            "number": {
+                "value": 80,
+                "density": {
+                    "enable": true,
+                    "value_area": 800
+                }
+            },
+            "color": {
+                "value": "#8b5cf6"
+            },
+            "shape": {
+                "type": "circle",
+                "stroke": {
+                    "width": 0,
+                    "color": "#000000"
+                }
+            },
+            "opacity": {
+                "value": 0.3,
+                "random": true,
+                "anim": {
+                    "enable": true,
+                    "speed": 1,
+                    "opacity_min": 0.1,
+                    "sync": false
+                }
+            },
+            "size": {
+                "value": 3,
+                "random": true,
+                "anim": {
+                    "enable": true,
+                    "speed": 2,
+                    "size_min": 0.1,
+                    "sync": false
+                }
+            },
+            "line_linked": {
+                "enable": true,
+                "distance": 150,
+                "color": "#8b5cf6",
+                "opacity": 0.2,
+                "width": 1
+            },
+            "move": {
+                "enable": true,
+                "speed": 1,
+                "direction": "none",
+                "random": true,
+                "straight": false,
+                "out_mode": "out",
+                "bounce": false,
+                "attract": {
+                    "enable": true,
+                    "rotateX": 600,
+                    "rotateY": 1200
+                }
+            }
+        },
+        "interactivity": {
+            "detect_on": "canvas",
+            "events": {
+                "onhover": {
+                    "enable": true,
+                    "mode": "grab"
+                },
+                "onclick": {
+                    "enable": true,
+                    "mode": "push"
+                },
+                "resize": true
+            },
+            "modes": {
+                "grab": {
+                    "distance": 140,
+                    "line_linked": {
+                        "opacity": 0.5
+                    }
+                },
+                "push": {
+                    "particles_nb": 4
+                }
+            }
+        },
+        "retina_detect": true
+    };
+
+    // Initialize particles for dashboard
+    if (document.getElementById('particles-dashboard')) {
+        particlesJS('particles-dashboard', particlesConfig);
+    }
+
+    // Message close functionality
+    document.querySelectorAll('.message-close').forEach(button => {
+        button.addEventListener('click', function() {
+            this.parentElement.remove();
+        });
+    });
+
+    // Add hover effects to cards
+    document.querySelectorAll('.dashboard-card').forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-8px)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+});
+</script>
+{% endblock %} 

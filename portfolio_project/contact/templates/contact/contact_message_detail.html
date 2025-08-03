@@ -1,0 +1,29 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Message from {{ message.name }}{% endblock %}
+
+{% block content %}
+<div class="message-detail-container">
+    <div class="message-detail-card">
+        <div class="message-header">
+            <h2>Message from {{ message.name }}</h2>
+            <div class="message-meta">
+                <p><strong>Email:</strong> {{ message.email }}</p>
+                <p><strong>Date:</strong> {{ message.created_at|date:"F d, Y at H:i" }}</p>
+            </div>
+        </div>
+        
+        <div class="message-content">
+            <h3>Message:</h3>
+            <div class="message-text">
+                {{ message.message|linebreaks }}
+            </div>
+        </div>
+        
+        <div class="message-actions">
+            <a href="{% url 'contact:contact_messages' %}" class="btn btn-secondary">Back to Messages</a>
+            <a href="{% url 'contact:contact_message_delete' message.pk %}" class="btn btn-danger">Delete Message</a>
+        </div>
+    </div>
+</div>
+{% endblock %} 

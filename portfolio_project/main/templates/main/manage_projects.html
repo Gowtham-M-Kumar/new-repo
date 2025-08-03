@@ -1,0 +1,209 @@
+{% extends 'main/base.html' %}
+{% block title %}{{ title }} | Settings{% endblock %}
+{% block content %}
+<style>
+    .manage-page {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 40px 0;
+    }
+    
+    .manage-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+    
+    .page-header {
+        text-align: center;
+        color: white;
+        margin-bottom: 40px;
+    }
+    
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+    
+    .page-subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+    }
+    
+    .content-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+    }
+    
+    .item-grid {
+        display: grid;
+        gap: 20px;
+    }
+    
+    .item-card {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    
+    .item-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: white;
+    }
+    
+    .item-actions {
+        display: flex;
+        gap: 10px;
+    }
+    
+    .btn {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+    }
+    
+    .btn-secondary {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .btn-danger {
+        background: linear-gradient(45deg, #ef4444, #dc2626);
+        color: white;
+    }
+    
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .item-content {
+        margin-bottom: 15px;
+    }
+    
+    .item-description {
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 10px;
+        line-height: 1.5;
+    }
+    
+    .item-meta {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+    
+    .meta-item {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 12px;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .empty-state h3 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+    }
+    
+    .back-link {
+        text-align: center;
+        margin-top: 20px;
+    }
+    
+    .back-link a {
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    
+    .back-link a:hover {
+        color: white;
+    }
+</style>
+
+<section class="manage-page">
+    <div class="manage-container">
+        <div class="page-header">
+            <h1 class="page-title">{{ title }}</h1>
+            <p class="page-subtitle">Edit or delete your projects</p>
+        </div>
+        
+        <div class="content-card">
+            <div class="item-actions" style="margin-bottom: 30px;">
+                <a href="{% url 'add_project' %}" class="btn btn-primary">+ Add New Project</a>
+                <a href="{% url 'settings_dashboard' %}" class="btn btn-secondary">← Back to Dashboard</a>
+            </div>
+            
+            <div class="item-grid">
+                {% for project in projects %}
+                <div class="item-card">
+                    <div class="item-header">
+                        <h3 class="item-title">{{ project.title }}</h3>
+                        <div class="item-actions">
+                            <a href="{% url 'edit_project' project.id %}" class="btn btn-primary">Edit</a>
+                            <a href="{% url 'delete_project' project.id %}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this project?')">Delete</a>
+                        </div>
+                    </div>
+                    <div class="item-content">
+                        <p class="item-description">{{ project.description }}</p>
+                        <div class="item-meta">
+                            <span class="meta-item">Order: {{ project.order }}</span>
+                            <span class="meta-item">Status: {% if project.is_active %}Active{% else %}Inactive{% endif %}</span>
+                            {% if project.tags %}
+                                <span class="meta-item">Tags: {{ project.tags }}</span>
+                            {% endif %}
+                            {% if project.github_link %}
+                                <span class="meta-item">GitHub: <a href="{{ project.github_link }}" target="_blank" style="color: #667eea;">Link</a></span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="empty-state">
+                    <h3>No projects yet</h3>
+                    <p>Start by adding your first project!</p>
+                    <a href="{% url 'add_project' %}" class="btn btn-primary" style="margin-top: 20px;">Add Your First Project</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="back-link">
+            <a href="{% url 'settings_dashboard' %}">← Back to Dashboard</a>
+        </div>
+    </div>
+</section>
+{% endblock %} 

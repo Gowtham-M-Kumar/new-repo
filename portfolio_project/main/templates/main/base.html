@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>{% block title %}Gowtham M Kumar | Portfolio{% endblock %}</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="/static/js/script.js" defer></script>
+</head>
+<body data-theme="dark">
+    <header class="glass-header">
+        <div class="container navbar">
+            <div class="logo">
+                <div class="logo-icon">GMK</div>
+            
+            </div>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#home" class="nav-link scroll-link"><span>Home</span></a></li>
+                <li><a href="#projects" class="nav-link scroll-link"><span>Projects</span></a></li>
+                <li><a href="#resume" class="nav-link scroll-link"><span>Resume</span></a></li>
+                <li><a href="#contact" class="nav-link scroll-link"><span>Contact</span></a></li>
+                <li><a href="#about" class="nav-link scroll-link"><span>About</span></a></li>
+            </ul>
+            <button class="mobile-menu-button" id="mobile-menu-button">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+    <main>
+        {% if messages %}
+            <div class="messages-container">
+                {% for message in messages %}
+                    <div class="message {% if message.tags %}{{ message.tags %}{% endif %}">
+                        {{ message }}
+                        <button class="message-close" onclick="this.parentElement.remove()">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <h3>Gowtham M Kumar</h3>
+                <p class="footer-tagline">Bringing ideas to life with Python, Django & modern web tools.</p>
+            </div>
+            <div class="footer-links">
+                <div class="link-group">
+                    <h4>Explore</h4>
+                    <a href="#home" class="scroll-link">Home</a>
+                    <a href="#projects" class="scroll-link">Projects</a>
+                    <a href="#about" class="scroll-link">About</a>
+                </div>
+                <div class="link-group">
+                    <h4>Resources</h4>
+                    <a href="#resume" class="scroll-link">Resume</a>
+                    <a href="#contact" class="scroll-link">Contact</a>
+                    <a href="{% url 'settings_login' %}" class="settings-link">⚙️ Settings</a>
+                </div>
+                <div class="link-group">
+                    <h4>Connect</h4>
+                    <a href="http://www.linkedin.com/in/gowtham-m-kumar-5abb19254">LinkedIn</a>
+                    <a href="https://github.com/Gowtham-M-Kumar">GitHub</a>
+                    <a href="mailto:gowthammkumar2025@gmail.com">Email</a>
+                </div>
+            </div>
+        </div>
+        <div class="container footer-bottom">
+            <p>&copy; 2025 Gowtham M Kumar</p>
+            <button class="theme-toggle">Toggle Theme</button>
+        </div>
+    </footer>
+</body>
+</html>

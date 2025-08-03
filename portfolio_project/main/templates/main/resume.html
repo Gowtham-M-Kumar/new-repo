@@ -1,0 +1,92 @@
+{% extends 'main/base.html' %}
+{% block title %}Resume | Gowtham{% endblock %}
+{% block content %}
+<section class="resume-section">
+    <div class="particles-background" id="particles-resume"></div>
+    <div class="container">
+        <div class="section-title">
+            <h2>Resume</h2>
+        </div>
+
+        <!-- Download Resume -->
+        <div class="download-resume">
+            <a href="/static/Web_Developer.pdf" class="cta-button" download>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 15V3M12 15L8 11M12 15L16 11M21 15V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Download My Resume
+            </a>
+        </div>
+
+        <!-- Education Section -->
+        {% if education %}
+        <div class="resume-block">
+            <h3>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; margin-right: 0.5rem; vertical-align: middle;">
+                    <path d="M22 10V6C22 4.89543 21.1046 4 20 4H4C2.89543 4 2 4.89543 2 6V10C2 11.1046 2.89543 12 4 12H20C21.1046 12 22 11.1046 22 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 10L12 16L22 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Education
+            </h3>
+            {% for edu in education %}
+            <div class="resume-item">
+                <h4>{{ edu.title }}</h4>
+                <span class="resume-subtitle">{{ edu.subtitle }}</span>
+                <span class="resume-date">{{ edu.date_range }}</span>
+                {% if edu.description %}
+                <p>{{ edu.description }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Experience Section -->
+        {% if experience %}
+        <div class="resume-block">
+            <h3>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; margin-right: 0.5rem; vertical-align: middle;">
+                    <path d="M21 16V8C21 6.89543 20.1046 6 19 6H5C3.89543 6 3 6.89543 3 8V16C3 17.1046 3.89543 18 5 18H19C20.1046 18 21 17.1046 21 16Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M7 10H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M7 14H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Experience
+            </h3>
+            {% for exp in experience %}
+            <div class="resume-item">
+                <h4>{{ exp.title }}</h4>
+                <span class="resume-subtitle">{{ exp.subtitle }}</span>
+                <span class="resume-date">{{ exp.date_range }}</span>
+                {% if exp.description %}
+                <p>{{ exp.description }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Skills Section -->
+        {% if skills %}
+        <div class="resume-block">
+            <h3>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; margin-right: 0.5rem; vertical-align: middle;">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Technical Skills
+            </h3>
+            <ul class="skill-list">
+                {% for skill in skills %}
+                    {% if skill.description %}
+                        <li>{{ skill.description }}</li>
+                    {% else %}
+                        <li>{{ skill.title }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

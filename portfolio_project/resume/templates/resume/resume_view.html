@@ -1,0 +1,73 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Resume{% endblock %}
+
+{% block content %}
+<section class="resume-section">
+    <div class="container">
+        <h2 class="section-title">Resume</h2>
+        
+        {% if education %}
+        <div class="resume-block">
+            <h3>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 14L16 10L18 12L12 18L6 12L8 10L12 14Z" fill="currentColor"/>
+                </svg>
+                Education
+            </h3>
+            {% for edu in education %}
+            <div class="resume-item">
+                <h4>{{ edu.title }}</h4>
+                <span class="resume-subtitle">{{ edu.subtitle }}</span>
+                <span class="resume-date">{{ edu.date_range }}</span>
+                {% if edu.description %}
+                <p>{{ edu.description }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if experience %}
+        <div class="resume-block">
+            <h3>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 14L16 10L18 12L12 18L6 12L8 10L12 14Z" fill="currentColor"/>
+                </svg>
+                Experience
+            </h3>
+            {% for exp in experience %}
+            <div class="resume-item">
+                <h4>{{ exp.title }}</h4>
+                <span class="resume-subtitle">{{ exp.subtitle }}</span>
+                <span class="resume-date">{{ exp.date_range }}</span>
+                {% if exp.description %}
+                <p>{{ exp.description }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if skills %}
+        <div class="resume-block">
+            <h3>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 14L16 10L18 12L12 18L6 12L8 10L12 14Z" fill="currentColor"/>
+                </svg>
+                Technical Skills
+            </h3>
+            <ul class="skill-list">
+                {% for skill in skills %}
+                    {% if skill.description %}
+                        <li>{{ skill.description }}</li>
+                    {% else %}
+                        <li>{{ skill.title }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %} 

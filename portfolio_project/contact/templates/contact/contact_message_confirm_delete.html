@@ -1,0 +1,21 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Delete Message{% endblock %}
+
+{% block content %}
+<div class="delete-container">
+    <div class="delete-card">
+        <h2>Delete Message</h2>
+        <p>Are you sure you want to delete the message from "{{ message.name }}"?</p>
+        <p class="warning">This action cannot be undone.</p>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="delete-actions">
+                <button type="submit" class="btn btn-danger">Delete Message</button>
+                <a href="{% url 'contact:contact_messages' %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %} 
