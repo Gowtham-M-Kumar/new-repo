@@ -16,6 +16,10 @@ from contact.forms import ContactForm
 def base(request):
     return render(request, 'main/base.html')
 
+def health_check(request):
+    """Health check endpoint for deployment platforms"""
+    return JsonResponse({'status': 'healthy', 'message': 'Django Portfolio is running'})
+
 def home(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
@@ -25,6 +29,9 @@ def home(request):
             
             # Send email notification
             try:
+                from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'noreply@example.com')
+                recipient_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'admin@example.com')
+                
                 send_mail(
                     subject=f'New Contact Message from {contact.name}',
                     message=f'''
@@ -32,9 +39,9 @@ Name: {contact.name}
 Email: {contact.email}
 Message: {contact.message}
                     ''',
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=[settings.DEFAULT_FROM_EMAIL],  # Send to yourself
-                    fail_silently=False,
+                    from_email=from_email,
+                    recipient_list=[recipient_email],
+                    fail_silently=True,
                 )
                 messages.success(request, 'Thank you! Your message has been sent successfully.')
             except Exception as e:
